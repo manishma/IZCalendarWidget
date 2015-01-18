@@ -11,16 +11,17 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.provider.CalendarContract;
-import android.provider.CalendarContract.Events;
 import android.provider.CalendarContract.Instances;
 import android.text.format.Time;
 import android.widget.RemoteViews;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
 
 public class CalendarAppWidgetProvider extends AppWidgetProvider {
 
@@ -70,8 +71,8 @@ public class CalendarAppWidgetProvider extends AppWidgetProvider {
             cal.set(Calendar.SECOND, 0);
             cal.set(Calendar.MILLISECOND, 0);
 
-            DateFormat dateFormat = DateFormat.getDateInstance();
-            DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
+            DateFormat dateFormat = new SimpleDateFormat("EEE, MMM d");
+            DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(context);
 
             long fromMillis = cal.getTimeInMillis();
             long toMillis = fromMillis + 7 * 24 * 3600000;
@@ -128,7 +129,12 @@ public class CalendarAppWidgetProvider extends AppWidgetProvider {
                 widgetView.removeAllViews(cellId);
 
                 RemoteViews cellTitle = cellTitleMaster.clone();
-                cellTitle.setTextViewText(R.id.title, dateFormat.format(cal.getTime()));
+                String title = dateFormat.format(cal.getTime());
+                if(j == 5) {
+                    cal.add(Calendar.DAY_OF_WEEK, 1);
+                    title += ", " + dateFormat.format(cal.getTime());
+                }
+                cellTitle.setTextViewText(R.id.title, title);
                 if (today == cal.get(Calendar.DAY_OF_WEEK)) {
                     cellTitle.setInt(R.id.title, "setBackgroundResource", android.R.color.holo_orange_dark);
                 }
@@ -138,8 +144,8 @@ public class CalendarAppWidgetProvider extends AppWidgetProvider {
                     EventData event = events.get(k);
 
                     if (event.AllDay
-                            ? ((event.StartDay >= dayStart && event.StartDay < dayEnd) || (event.EndDay >= dayStart && event.EndDay < dayEnd))
-                            : ((event.Start >= dayStartMillis && event.Start < dayEndMillis) || (event.End >= dayStartMillis && event.End < dayEndMillis))) {
+                            ? ((event.StartDay >= dayStart && event.StartDay < dayEnd) || (event.EndDay >= dayStart && event.EndDay < dayEnd) || (event.StartDay < dayStart && event.EndDay >= dayEnd))
+                            : ((event.Start >= dayStartMillis && event.Start < dayEndMillis) || (event.End >= dayStartMillis && event.End < dayEndMillis) || event.Start < dayStartMillis && event.End >= dayEndMillis)) {
                         RemoteViews cellRow = cellRowMaster.clone();
                         if (event.AllDay) {
                             cellRow.setInt(R.id.title, "setBackgroundColor", event.Color);
