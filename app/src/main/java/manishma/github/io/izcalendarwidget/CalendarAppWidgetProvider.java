@@ -136,7 +136,7 @@ public class CalendarAppWidgetProvider extends AppWidgetProvider {
                 }
                 cellTitle.setTextViewText(R.id.title, title);
                 if (today == cal.get(Calendar.DAY_OF_WEEK)) {
-                    cellTitle.setInt(R.id.title, "setBackgroundResource", android.R.color.holo_orange_dark);
+                    cellTitle.setInt(R.id.title, "setBackgroundResource", R.drawable.cell_selected_title_background);
                 }
                 widgetView.addView(cellId, cellTitle);
 
