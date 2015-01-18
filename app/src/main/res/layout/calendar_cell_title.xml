@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:text=""
-    android:padding="2dp"
+    android:padding="@dimen/cell_row_padding"
     android:textSize="10sp"
     android:id="@+id/title"
-    android:background="@android:color/holo_blue_dark"
-    android:textColor="@android:color/primary_text_dark" />
+    android:background="@drawable/cell_title_background"
+    android:textColor="@android:color/white" />
