@@ -78,11 +78,7 @@ public class CalendarAppWidgetProvider extends AppWidgetProvider {
             ContentResolver cr = context.getContentResolver();
 
             // Construct the query with the desired date range.
-            Uri.Builder builder = Instances.CONTENT_URI.buildUpon();
-            ContentUris.appendId(builder, fromMillis);
-            ContentUris.appendId(builder, toMillis);
-            String selection = Instances.VISIBLE + "=1";
-            Cursor cur = cr.query(builder.build(), INSTANCE_PROJECTION, selection, null, null);
+            Cursor cur = Instances.query(cr, INSTANCE_PROJECTION, fromMillis, toMillis);
             while (cur.moveToNext()) {
 
                 EventData event = new EventData();
@@ -109,11 +105,11 @@ public class CalendarAppWidgetProvider extends AppWidgetProvider {
                 long dayStartMillis = cal.getTimeInMillis();
                 long dayEndMillis = dayStartMillis + (j < 5 ? 1 : 2) * 24 * 3600000;
 
-                long dayStart = Time.getJulianDay(dayStartMillis, cal.getTimeZone().getOffset(cal.getTimeInMillis())/1000);
-                long dayEnd = dayStart + 1;
+                long dayStart = Time.getJulianDay(dayStartMillis, cal.getTimeZone().getOffset(cal.getTimeInMillis()) / 1000);
+                long dayEnd = dayStart + (j < 5 ? 1 : 2);
 
                 // Create an Intent to launch Calendar
-                builder = CalendarContract.CONTENT_URI.buildUpon();
+                Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
                 builder.appendPath("time");
                 ContentUris.appendId(builder, cal.getTimeInMillis());
                 Intent intent = new Intent(Intent.ACTION_VIEW, builder.build());
@@ -133,11 +129,11 @@ public class CalendarAppWidgetProvider extends AppWidgetProvider {
                 for (int k = 0; k < events.size(); k++) {
                     EventData event = events.get(k);
 
-                    if(event.AllDay
+                    if (event.AllDay
                             ? ((event.StartDay >= dayStart && event.StartDay < dayEnd) || (event.EndDay >= dayStart && event.EndDay < dayEnd))
                             : ((event.Start >= dayStartMillis && event.Start < dayEndMillis) || (event.End >= dayStartMillis && event.End < dayEndMillis))) {
                         RemoteViews cellRow = cellRowMaster.clone();
-                        if(event.AllDay) {
+                        if (event.AllDay) {
                             cellRow.setInt(R.id.title, "setBackgroundColor", event.Color);
                             cellRow.setTextViewText(R.id.title, event.Title);
                         } else {
