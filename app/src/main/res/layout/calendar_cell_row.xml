@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:text=""
     android:padding="@dimen/cell_row_padding"
-    android:textSize="10sp"
+    android:textSize="11sp"
     android:id="@+id/title"
-    android:textColor="@android:color/white" />
+    android:textColor="@android:color/white"
+    android:maxLines="2" />
