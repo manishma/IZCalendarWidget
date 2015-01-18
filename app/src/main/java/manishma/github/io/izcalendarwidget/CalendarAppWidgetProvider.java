@@ -8,6 +8,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
@@ -81,6 +82,13 @@ public class CalendarAppWidgetProvider extends AppWidgetProvider {
             Cursor cur = Instances.query(cr, INSTANCE_PROJECTION, fromMillis, toMillis);
             while (cur.moveToNext()) {
 
+                int color = cur.getInt(INSTANCE_PROJECTION_DISPLAY_COLOR_INDEX);
+                float[] hsv = new float[3];
+                Color.colorToHSV(color, hsv);
+                hsv[1] = Math.max(hsv[2], .7f);
+                hsv[2] = Math.min(hsv[2], .7f);
+                color = Color.HSVToColor(hsv);
+
                 EventData event = new EventData();
                 event.Title = cur.getString(INSTANCE_PROJECTION_TITLE_INDEX);
                 event.Start = cur.getLong(INSTANCE_PROJECTION_BEGIN_INDEX);
@@ -88,7 +96,7 @@ public class CalendarAppWidgetProvider extends AppWidgetProvider {
                 event.AllDay = cur.getInt(INSTANCE_PROJECTION_ALL_DAY_INDEX) > 0;
                 event.StartDay = cur.getLong(INSTANCE_PROJECTION_START_DAY_INDEX);
                 event.EndDay = cur.getLong(INSTANCE_PROJECTION_END_DAY_INDEX);
-                event.Color = cur.getInt(INSTANCE_PROJECTION_DISPLAY_COLOR_INDEX);
+                event.Color = color;
                 events.add(event);
             }
             cur.close();
