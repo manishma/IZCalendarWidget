@@ -4,10 +4,56 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar"
+        android:background="@drawable/toolbar_background">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/toolbarTitle"
+            android:layout_weight="1"
+            android:layout_marginRight="@dimen/cell_spacing"
+            android:layout_marginLeft="@dimen/cell_spacing"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:text=""
+            android:id="@+id/prevButton"
+            android:background="@drawable/ic_menu_back"
+            android:layout_marginRight="@dimen/cell_spacing"
+            android:layout_marginLeft="@dimen/cell_spacing" />
+
+        <Button
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:text=""
+            android:id="@+id/todayButton"
+            android:background="@android:drawable/ic_menu_today"
+            android:layout_marginRight="@dimen/cell_spacing"
+            android:layout_marginLeft="@dimen/cell_spacing" />
+
+        <Button
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:text=""
+            android:id="@+id/nextButton"
+            android:background="@drawable/ic_menu_forward"
+            android:layout_marginRight="@dimen/cell_spacing"
+            android:layout_marginLeft="@dimen/cell_spacing" />
+    </LinearLayout>
+
+    <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/gridview">
+        android:id="@+id/gridview"
+        android:paddingTop="@dimen/cell_spacing">
 
         <LinearLayout
             android:orientation="horizontal"
